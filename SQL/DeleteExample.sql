@@ -1,0 +1,1 @@
+delete from Album where Title = 'All Eyez On Me';
