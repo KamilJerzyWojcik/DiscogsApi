@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
 
-namespace DiscogsApi
+namespace DiscogsApi.DataBase
 {
 	public class SqlHelper
 	{
@@ -18,7 +18,7 @@ namespace DiscogsApi
 			return conn;
 		}
 
-		public static List<AlbumModel> Get(int start, int take)
+		public static List<AlbumModel> GetIDs(int start, int take)
 		{
 			var albumList = new List<AlbumModel>();
 
@@ -50,7 +50,6 @@ namespace DiscogsApi
 				{
 					AlbumModel album = new AlbumModel();
 					album.ID = (int)data["AlbumID"];
-					album.Reload();
 					albumList.Add(album);
 				}
 			}

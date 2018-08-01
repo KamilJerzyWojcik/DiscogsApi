@@ -128,12 +128,18 @@ namespace DiscogsApi
 			}
 
 			string command = "";
+			release = "";
 			int index = 0;
 			do
 			{
-				Console.Clear();
-				release = discogsClient.SetLink(link[index]).GetLinkResult(); //zapytanie o wydanie konkretne
+				if (link.Count == 0) return false;
 
+				Console.Clear();
+				if (index < link.Count)
+					release = discogsClient.SetLink(link[index]).GetLinkResult(); //zapytanie o wydanie konkretne
+				else
+					release = "";
+				
 				if(!string.IsNullOrEmpty(release)) ShowRelease(release);
 
 				if (string.IsNullOrEmpty(release))
@@ -143,7 +149,11 @@ namespace DiscogsApi
 					command = Console.ReadLine();
 
 					if (command == "n") return false;
-					if (command == "y") index = 1;
+					if (command == "y")
+					{
+						index = 0;
+						continue;
+					}
 				}
 				else
 				{

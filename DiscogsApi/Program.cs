@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Xml;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using DiscogsApi.DataBase;
 
 
 namespace DiscogsApi

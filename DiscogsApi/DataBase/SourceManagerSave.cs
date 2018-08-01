@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DiscogsApi.DataBase
 {
-	class SourceManager
+	public class SourceManagerSave
 	{
 		public static int Add(AlbumModel album)
 		{

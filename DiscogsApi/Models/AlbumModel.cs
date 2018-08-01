@@ -13,11 +13,10 @@ namespace DiscogsApi
 			TrackList = new List<TrackModel>();
 			Videos = new List<string>();
 			Images = new List<string>();
-			ExtraArtistsRoleName = new Dictionary<string, string>();
 			ExtraArtists = new List<ArtistModel>();
 		}
 
-		public int ID { get; set; }
+		public int ID { get; set; } = 0;
 		public string Title { get; set; }
 		public string Artists { get; set; }
 		public List<string> Genres { get; set; }
@@ -25,7 +24,6 @@ namespace DiscogsApi
 		public List<TrackModel> TrackList { get; set; }
 		public List<string> Videos { get; set; }
 		public List<string> Images { get; set; }
-		public Dictionary<string, string> ExtraArtistsRoleName { get; set; }
 		public List<ArtistModel> ExtraArtists { get; set; }
 
 		public int Save(AlbumModel newAlbum)
@@ -33,9 +31,9 @@ namespace DiscogsApi
 			try
 			{
 				Console.Clear();
-				if (SourceManager.AlbumExists(newAlbum)) throw new Exception("Album exist in Base");
+				if (SourceManagerSave.AlbumExists(newAlbum)) throw new Exception("Album exist in Base");
 
-				int ID = SourceManager.Add(newAlbum);
+				int ID = SourceManagerSave.Add(newAlbum);
 				if (ID == -1) throw new Exception("Error, Data didn't save to Base");
 
 				Console.ForegroundColor = ConsoleColor.Green;
@@ -54,9 +52,24 @@ namespace DiscogsApi
 
 		public bool Reload()
 		{
-			Console.WriteLine("zaktualizowano album id: " + ID);
-			Console.ReadKey();
-			return true;
+			try
+			{	
+				if (ID <= 0) throw new Exception("Error, incorect album ID");
+
+				SourceManagerLoad.Load(this);
+
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.WriteLine($"Odczytano z bazy danych album o ID: {ID}");
+				Console.ResetColor();
+				return true;
+			}
+			catch (Exception e)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine(e.Message);
+				Console.ResetColor();
+				return false;
+			}
 		}
 	}
 }
