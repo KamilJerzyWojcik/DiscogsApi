@@ -68,7 +68,7 @@ namespace DiscogsApi.DataBase
 			}
 		}
 
-		public static AlbumModel GetByID(int id)
+		public static AlbumModel GetAlbumByID(int id)
 		{
 			AlbumModel album = new AlbumModel();
 			album.ID = id;
@@ -77,7 +77,7 @@ namespace DiscogsApi.DataBase
 			return album;
 		}
 
-		public static List<AlbumModel> GetByName(string Title, out int numberAllAlbums, int page = -1)
+		public static List<AlbumModel> GetIDByName(string Title, out int numberAllAlbums, int page = -1)
 		{
 			numberAllAlbums = 0;
 			using (var connection = GetConnection())
@@ -101,7 +101,6 @@ namespace DiscogsApi.DataBase
 				while (data.HasRows && data.Read())
 				{
 					AlbumModel album = new AlbumModel((int)data["AlbumID"]);
-					album.Reload();
 					albums.Add(album);
 				}
 
