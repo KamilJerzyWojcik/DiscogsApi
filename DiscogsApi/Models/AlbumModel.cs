@@ -6,6 +6,17 @@ namespace DiscogsApi
 {
 	public class AlbumModel
 	{
+		public AlbumModel(int iD)
+		{
+			ID = iD;
+			Genres = new List<string>();
+			Styles = new List<string>();
+			TrackList = new List<TrackModel>();
+			Videos = new List<string>();
+			Images = new List<string>();
+			ExtraArtists = new List<ArtistModel>();
+		}
+
 		public AlbumModel()
 		{
 			Genres = new List<string>();
@@ -26,14 +37,14 @@ namespace DiscogsApi
 		public List<string> Images { get; set; }
 		public List<ArtistModel> ExtraArtists { get; set; }
 
-		public int Save(AlbumModel newAlbum)
+		public int Save()
 		{
 			try
 			{
 				Console.Clear();
-				if (SourceManagerSave.AlbumExists(newAlbum)) throw new Exception("Album exist in Base");
+				if (SourceManagerSave.AlbumExists(this)) throw new Exception("Album exist in Base");
 
-				int ID = SourceManagerSave.Add(newAlbum);
+				int ID = SourceManagerSave.Add(this);
 				if (ID == -1) throw new Exception("Error, Data didn't save to Base");
 
 				Console.ForegroundColor = ConsoleColor.Green;

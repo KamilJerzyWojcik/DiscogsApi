@@ -14,6 +14,21 @@ namespace DiscogsApi
 	{
 		static void Main(string[] args)
 		{
+
+			int n = SqlHelper.NumberAllAlbums();
+			Console.WriteLine("liczba albumów: " + n);
+			AlbumModel album = SqlHelper.GetByID(31);
+
+			Console.WriteLine("Tytuł: " + album.Title);
+			Console.WriteLine("pierwszy utwór: " + album.TrackList[0].Title);
+
+			List<AlbumModel> albums = SqlHelper.GetByName("All", out int numberAllAlbums, 1);
+
+			Console.WriteLine("liczba albumów: " + numberAllAlbums);
+			Console.WriteLine("tytuł pierwszego albumu: " + albums[0].Title);
+
+			Console.ReadKey();
+		/*
 			string command;
 			
 			do
@@ -31,6 +46,7 @@ namespace DiscogsApi
 				}
 
 			} while (true);
+			*/
 		}
 
 		private static void ShowAlbum(string command)
@@ -58,7 +74,7 @@ namespace DiscogsApi
 			{
 				case "y":
 					Console.Clear();
-					ID = newAlbum.Save(newAlbum);
+					ID = newAlbum.Save();
 					return ID;
 				case "n":
 					Console.Clear();

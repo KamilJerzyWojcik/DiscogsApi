@@ -55,5 +55,68 @@ namespace DiscogsApi.DataBase
 			}
 			return albumList;
 		}
+
+		public static int NumberAllAlbums()
+		{
+			using (var connection = GetConnection())
+			{
+				var sqlCommand = new SqlCommand();
+				sqlCommand.Connection = connection;
+				sqlCommand.CommandText = @"Select COUNT(AlbumID) from Album;";
+
+				return (int)sqlCommand.ExecuteScalar();
+			}
+		}
+
+		public static AlbumModel GetByID(int id)
+		{
+			AlbumModel album = new AlbumModel();
+			album.ID = id;
+			album.Reload();
+
+			return album;
+		}
+
+		public static List<AlbumModel> GetByName(string Title, out int numberAllAlbums, int page = -1)
+		{
+			numberAllAlbums = 0;
+			using (var connection = GetConnection())
+			{
+				List<AlbumModel> albums = new List<AlbumModel>();
+
+				var sqlCommand = new SqlCommand();
+				sqlCommand.Connection = connection;
+				sqlCommand.CommandText = "SELECT AlbumID FROM Album Where Title like @Title;";
+
+				var sqlIdParam = new SqlParameter
+				{
+					DbType = System.Data.DbType.String,
+					Value = Title += "%",
+					ParameterName = "@Title"
+				};
+				sqlCommand.Parameters.Add(sqlIdParam);
+
+				var data = sqlCommand.ExecuteReader();
+
+				while (data.HasRows && data.Read())
+				{
+					AlbumModel album = new AlbumModel((int)data["AlbumID"]);
+					album.Reload();
+					albums.Add(album);
+				}
+
+				if (page == -1)
+					return albums;
+
+				numberAllAlbums = albums.Count;
+				List<AlbumModel> albumPag = new List<AlbumModel>();
+				for (int i = (page - 1) * 3; i <= (page - 1) * 3 + 2; i++)
+				{
+					if (i <= albums.Count - 1)
+						albumPag.Add(albums[i]);
+				}
+				return albumPag;
+			}
+		}
 	}
 }
